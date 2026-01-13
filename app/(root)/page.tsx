@@ -7,25 +7,25 @@ export default function Home() {
         <main className="space-y-16 py-8">
           {/* Hero Section */}
           <section className="text-center space-y-6">
-            <p className="ascii-scale text-1xl md:text-1xl font-bold bg-gradient-to-r from-gray to-white bg-clip-text text-transparent whitespace-pre font-mono leading-tight">
+            <p className="ascii-scale text-1xl md:text-1xl font-bold bg-linear-to-r from-gray to-white bg-clip-text text-transparent whitespace-pre font-mono leading-tight">
               {`
  ____                                            
-|  _ \\  __ _ _ __ ___   __ _ _ __ ___  ___ _ __  
-| | | |/ _\` | '_ \` _ \\ / _\` | '__/ _ \\/ _ \\ '_ \\ 
+|  _ \\  __ _ _ __ ___   __ _ _ __ ___  ___ _ __
+| | | |/ _\` | '_ \` _ \\ / _\` | '__/ _ \\/ _ \\ '_ \\
 | |_| | (_| | | | | | | (_| | | |  __/  __/ | | |
 |____/ \\__,_|_| |_| |_|\\__,_|_|  \\___|\\___|_| |_|
 `}
             </p>
 
             <p className="text-2xl text-gray-300 max-w-2xl mx-auto mt-10">
-              Egy fantasy kártyajáték, ahol stratégia és
-              képzelet fonódik össze. Teremts hősöket, járd végig a kazamatákat,
-              és írd fel saját történelmed a paklid lapjaira.
+              Egy fantasy kártyajáték, ahol stratégia és képzelet fonódik össze.
+              Teremts hősöket, járd végig a kazamatákat, és írd fel saját
+              történelmed a paklid lapjaira.
             </p>
             <div className="space-x-4">
               <Link
-                  href="/dashboard"
-                  className="relative hover:bg-green-900/20 inline-block px-10 py-4 font-mono text-2xl font-bold text-green-300 border-2 border-green-800 rounded-lg transition-all duration-300 hover:text-green-100 hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] hover:border-green-500 group"
+                href="/dashboard"
+                className="relative hover:bg-green-900/20 inline-block px-10 py-4 font-mono text-2xl font-bold text-green-300 border-2 border-green-800 rounded-lg transition-all duration-300 hover:text-green-100 hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] hover:border-green-500 group"
               >
                 <span className="relative z-10">▶ Játssz most</span>
                 <span className="absolute inset-0   opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></span>
@@ -122,8 +122,8 @@ export default function Home() {
               fejleszthető fantasy kártyajáték élményében.
             </p>
             <Link
-                href="/dashboard"
-                className="relative hover:bg-green-900/20 inline-block px-10 py-4 font-mono text-2xl font-bold text-green-300 border-2 border-green-800 rounded-lg transition-all duration-300 hover:text-green-100 hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] hover:border-green-500 group"
+              href="/dashboard"
+              className="relative hover:bg-green-900/20 inline-block px-10 py-4 font-mono text-2xl font-bold text-green-300 border-2 border-green-800 rounded-lg transition-all duration-300 hover:text-green-100 hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] hover:border-green-500 group"
             >
               <span className="relative z-10">▶ Játssz most ingyen</span>
               <span className="absolute inset-0   opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300"></span>
@@ -131,37 +131,6 @@ export default function Home() {
           </section>
         </main>
       </div>
-      <footer className="footer text-amber-50 py-16 px-6 w-full">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-4 mb-6">
-                <img src="/img/logo.svg" alt="Logo" className="w-20 h-20" />
-                <h3 className="text-2xl font-bold text-amber-50">
-                  Szegfűsor
-                  <span className="text-amber-400"></span>
-                </h3>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-xl font-semibold mb-6 text-amber-400">
-                Csapattagok
-              </h4>
-              <div className="space-y-4 text-amber-100 opacity-75 text-lg">
-                <p>Sőrés Máté</p>
-                <p>Belényesi István</p>
-                <p>Menyhért Bence</p>
-              </div>
-            </div>
-          </div>
-          <div className={"text-center"}>
-            <p className={"space-y-4 text-amber-100 opacity-75 text-lg"}>
-              © 2025 Minden jog fenntartva
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
