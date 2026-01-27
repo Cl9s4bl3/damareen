@@ -190,8 +190,6 @@ export function CharacterCreationStep({ data, onUpdate, onNext, onBack }: Charac
     newCards[index] = { ...newCards[index], ...updates };
     onUpdate({ cards: newCards });
 
-    // Restore cursor position
-
   };
 
 

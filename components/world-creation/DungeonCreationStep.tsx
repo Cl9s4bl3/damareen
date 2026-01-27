@@ -262,7 +262,6 @@ export function DungeonCreationStep({
       return;
     }
 
-    // Vezér a végére
     let order;
     if (cardType === "vezer") {
       order = currentCards.length;
@@ -336,14 +335,11 @@ export function DungeonCreationStep({
         cards[cardIndex - 1],
       ];
     } else if (direction === "down" && cardIndex < lastNormalIndex) {
-      // Only allow moving down if we're not trying to go past the last normal card position
       [cards[cardIndex], cards[cardIndex + 1]] = [
         cards[cardIndex + 1],
         cards[cardIndex],
       ];
     }
-
-    // Update order for all cards and ensure vezer cards are last
     const reorderedCards = reorderCardsForVezerLast(cards);
     updateDungeon(dungeonIndex, { cards: reorderedCards });
   };
@@ -399,8 +395,6 @@ export function DungeonCreationStep({
       toast.error("Legalább egy kazamata szükséges!");
       return;
     }
-
-    // Determine the highest normal card requirement among added dungeons
     const requiredNormal = Math.max(
         ...addedDungeons.map(d => {
           const dungeonType = dungeonTypes.find(dt => dt.type === d.type);
@@ -497,8 +491,6 @@ export function DungeonCreationStep({
                 const availableCards = getAvailableCardsForDungeon(index);
                 const errors = validateDungeon(dungeon);
                 const hasErrors = Object.keys(errors).length > 0;
-
-                // Get sorted cards (vezer always last)
                 const sortedCards = [...(dungeon.cards || [])].sort(
                   (a: any, b: any) => a.order - b.order,
                 );

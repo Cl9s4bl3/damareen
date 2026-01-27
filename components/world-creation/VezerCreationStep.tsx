@@ -148,7 +148,6 @@ export function VezerCreationStep({
     onUpdate({ vezerCards });
 
       if (updates.asciiArt !== undefined) {
-          // Only update ASCII art for that card without regenerating the whole array
           onUpdate(prev => {
               const updatedCards = [...prev.vezerCards];
               updatedCards[index] = {
@@ -386,7 +385,6 @@ export function VezerCreationStep({
   );
 }
 
-// Helper functions
 function getSymbolForType(type: string) {
   return type === "fire" ? "🔥" : type === "water" ? "💧" : type === "earth" ? "🪨" : "💨";
 }
@@ -395,7 +393,6 @@ function getBorderColor(type: string) {
   return type === "fire" ? "hsla(0,80%,50%,0.5)" : type === "water" ? "hsla(210,100%,50%,0.99)" : type === "earth" ? "hsl(35,50%,40%)" : "hsl(180,70%,60%)";
 }
 
-// Generate ASCII art for a Vezer card
 function generateVezerAscii(card: any) {
   const symbol = getSymbolForType(card.type);
 

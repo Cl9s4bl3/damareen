@@ -13,20 +13,24 @@ export async function comparePassword(password: string, hash: string) {
 }
 
 export function createToken(payload: object) {
-    return jwt.sign(payload, SECRET, { expiresIn: "6h" });
+  return jwt.sign(payload, SECRET, {
+    algorithm: "HS256",
+    expiresIn: "1h",
+    jwtid: crypto.randomUUID(),
+  });
 }
 
 export function verifyToken(token: string) {
-    try {
-        return jwt.verify(token, SECRET);
-    } catch {
-        return null;
-    }
+  try {
+    return jwt.verify(token, SECRET, { algorithms: ["HS256"] });
+  } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) return null;
+    return null;
+  }
 }
 
 export async function getCurrentUser() {
     try {
-        // PROMISE!
         const cookieStore = await cookies();
         let token = cookieStore.get("token")?.value;
 

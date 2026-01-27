@@ -173,16 +173,14 @@ export function BattleVisuals({
 
                 const impactThreshold = 0.98;
 
-                // apply both damages once when projectiles reach near target for this turn
                 if (travelProgress >= impactThreshold && currentTurn > lastAppliedTurnRef.current) {
-                    // simultaneous damage (allow negative results)
                     const playerDamage = currentPlayerCard.damage ?? 0;
                     const enemyDamage = currentEnemy.damage ?? 0;
 
                     const prevEnemyHP = enemyHPRef.current;
                     const prevPlayerHP = playerHPRef.current;
 
-                    const newEnemyHP = Math.max(-9999, prevEnemyHP - playerDamage); // allow negative
+                    const newEnemyHP = Math.max(-9999, prevEnemyHP - playerDamage);
                     const newPlayerHP = Math.max(-9999, prevPlayerHP - enemyDamage);
 
                     if (newEnemyHP !== prevEnemyHP) {
@@ -231,18 +229,16 @@ export function BattleVisuals({
             drawSimultaneousProjectiles(ctx, width, height, elapsedSeconds);
         }
     };
-
-    // Simultaneous projectiles: sinusoidal wave path, small amplitude, randomized per turn, vanish on impact
+    
     const drawSimultaneousProjectiles = (ctx: CanvasRenderingContext2D, width: number, height: number, elapsedSeconds: number) => {
-        const globalTurn = Math.max(0, Math.floor(elapsedSeconds / 5)); // 0-based
+        const globalTurn = Math.max(0, Math.floor(elapsedSeconds / 5));
         const phaseTime = elapsedSeconds % 5;
-        const travelProgress = Math.min(1, phaseTime / 2.5); // 0..1 in first half; after 1, projectiles shouldn't be drawn
-
-        // ensure random arc params for this turn
+        const travelProgress = Math.min(1, phaseTime / 2.5);
+        
         if (!arcRandomRef.current[globalTurn]) {
             arcRandomRef.current[globalTurn] = {
-                amp: 8 + Math.random() * 10, // small amplitude so it stays on screen
-                freq: 2 + Math.random() * 2, // wave frequency
+                amp: 8 + Math.random() * 10,
+                freq: 2 + Math.random() * 2,
                 phase: Math.random() * Math.PI * 2,
             };
         }
@@ -250,21 +246,15 @@ export function BattleVisuals({
 
         const playerPos = getCharacterPosition(false, width, height);
         const enemyPos = getCharacterPosition(true, width, height);
-
-        // if travelProgress is 1 or greater, projectiles have impacted and should not be drawn any longer (impact flash is drawn near 0.95..1)
         const drawProgress = travelProgress;
 
-        // helper to compute sinus offset perpendicular to trajectory
         const computeSinOffset = (from: { x: number; y: number }, to: { x: number; y: number }, t: number, isLeftToRight: boolean) => {
             const dx = to.x - from.x;
             const dy = to.y - from.y;
             const len = Math.hypot(dx, dy) || 1;
-            // normalized perpendicular vector
             const px = -dy / len;
             const py = dx / len;
-
-            // sin-based offset (zero at endpoints, wave in middle)
-            const sinFactor = Math.sin(t * Math.PI * arc.freq + arc.phase) * Math.sin(t * Math.PI); // zero at 0 and 1
+            const sinFactor = Math.sin(t * Math.PI * arc.freq + arc.phase) * Math.sin(t * Math.PI);
             const sign = isLeftToRight ? 1 : -1;
             const offset = sinFactor * arc.amp * sign;
 
@@ -272,16 +262,13 @@ export function BattleVisuals({
         };
 
         const drawOne = (from: { x: number; y: number }, to: { x: number; y: number }, type: Card["type"], leftToRight: boolean) => {
-            // only draw while traveling (0..1), otherwise disappear
             if (drawProgress <= 0) return;
             if (drawProgress >= 1) {
-                // draw a very short impact flash and return (projectile & trail removed)
                 const color = typeColor(type);
                 drawImpact(ctx, to.x, to.y - 6, color);
                 return;
             }
 
-            // easing (easeOut)
             const p = 1 - Math.pow(1 - drawProgress, 2);
             const x = from.x + (to.x - from.x) * p;
             const y = from.y + (to.y - from.y) * p;
@@ -289,8 +276,7 @@ export function BattleVisuals({
             const off = computeSinOffset(from, to, p, leftToRight);
             const projX = x + off.ox;
             const projY = y + off.oy;
-
-            // color & glyph
+            
             const glyph = getProjectileGlyph(type);
             const color = typeColor(type);
 
@@ -298,7 +284,6 @@ export function BattleVisuals({
             ctx.font = "18px monospace";
             ctx.textAlign = "center";
 
-            // draw a short trail behind projectile while traveling (but vanish on impact)
             const trailCount = 3;
             for (let t = 1; t <= trailCount; t++) {
                 const backP = Math.max(0, p - t * 0.06);
@@ -310,12 +295,9 @@ export function BattleVisuals({
                 ctx.fillText(glyph, bx + backOff.ox, by + backOff.oy);
             }
 
-            // main projectile
             ctx.globalAlpha = 1;
             ctx.fillStyle = color;
             ctx.fillText(glyph, projX, projY);
-
-            // small impact hint when near target
             if (drawProgress >= 0.92) {
                 drawImpact(ctx, to.x, to.y - 6, color);
             }
@@ -323,7 +305,6 @@ export function BattleVisuals({
             ctx.restore();
         };
 
-        // Draw both projectiles (player->enemy and enemy->player) with opposite leftToRight flags to vary offset direction
         drawOne(playerPos, enemyPos, currentPlayerCard.type, true);
         drawOne(enemyPos, playerPos, currentEnemy.type, false);
     };
@@ -343,14 +324,21 @@ export function BattleVisuals({
         }
     };
 
-    // Character drawing (ASCII + HP)
     const drawCharacter = (ctx: CanvasRenderingContext2D, card: Card, isEnemy: boolean, width: number, height: number, currentHP: number) => {
         const pos = getCharacterPosition(isEnemy, width, height);
         drawAsciiArt(ctx, card, pos.x, pos.y, isEnemy, width, height);
         drawCharacterInfo(ctx, card, pos.x, pos.y, isEnemy, width, height, currentHP);
     };
 
-    const drawAsciiArt = (ctx: CanvasRenderingContext2D, card: Card, x: number, y: number, isEnemy: boolean, width: number, height: number) => {
+    const drawAsciiArt = (
+        ctx: CanvasRenderingContext2D,
+        card: Card,
+        x: number,
+        y: number,
+        isEnemy: boolean,
+        width: number,
+        height: number
+    ) => {
         if (!card.asciiArt) {
             ctx.fillStyle = isEnemy ? "rgba(255,100,100,0.9)" : "rgba(100,255,100,0.9)";
             ctx.font = "14px monospace";
@@ -358,30 +346,43 @@ export function BattleVisuals({
             ctx.fillText(isEnemy ? "E" : "P", x, y);
             return;
         }
-
-        const asciiLines = card.asciiArt.split("\n").filter((l) => l.trim() !== "");
-        const fontSize = Math.max(6, Math.min(14, dimensions.width / 40));
+    
+        const asciiLines = card.asciiArt.split("\n").filter((l) => l !== "");
+        if (asciiLines.length === 0) return;
+    
+        const maxCharWidth = Math.max(...asciiLines.map((line) => line.length)) || 1;
+        const maxWidth = width * 0.25;
+        const maxHeight = height * 0.4;
+    
+        const widthBasedFont = Math.floor(maxWidth / maxCharWidth);
+        const heightBasedFont = Math.floor(maxHeight / asciiLines.length);
+    
+        const fontSize = Math.max(6, Math.min(14, Math.min(widthBasedFont, heightBasedFont)));
         const lineHeight = fontSize * 1.1;
-
+    
         ctx.fillStyle = isEnemy ? "rgba(255,120,120,0.95)" : "rgba(150,255,150,0.95)";
         ctx.font = `${fontSize}px monospace`;
-        ctx.textAlign = "center";
-
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+    
+        const longestLineLength = Math.max(...asciiLines.map((l) => l.length));
+        const totalBlockWidth = fontSize * longestLineLength * 0.6;
+        const startX = x - totalBlockWidth / 2;
+    
         asciiLines.forEach((line, i) => {
-            const displayLine = dimensions.width < 400 ? line.trim().substring(0, 10) : line.trim();
             const drawY = y - (asciiLines.length * lineHeight) / 2 + i * lineHeight;
-            ctx.fillText(displayLine, x, drawY);
+            ctx.fillText(line, startX, drawY);
         });
     };
+
 
     const drawCharacterInfo = (ctx: CanvasRenderingContext2D, card: Card, x: number, y: number, isEnemy: boolean, width: number, height: number, currentHP: number) => {
         const asciiLines = card.asciiArt ? card.asciiArt.split("\n").filter((l) => l.trim() !== "") : [];
         const fontSize = Math.max(8, Math.min(12, width / 45));
         const lineHeight = fontSize * 1.1;
         const artHeight = asciiLines.length * lineHeight;
-
-        // Increased spacing for health bar to prevent cutoff
-        const infoY = y + artHeight / 2 + 35; // Increased from 25 to 35
+        
+        const infoY = y + artHeight / 2 + 35;
 
         ctx.fillStyle = isEnemy ? "rgba(255,80,80,0.95)" : "rgba(80,255,80,0.95)";
         ctx.font = `bold ${fontSize}px monospace`;

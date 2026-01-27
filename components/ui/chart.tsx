@@ -307,7 +307,6 @@ function ChartLegendContent({
   )
 }
 
-// Helper function a tárgy configokhoz egy payloadból
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,

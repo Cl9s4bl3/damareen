@@ -137,7 +137,6 @@ export default function WorldPage() {
 
                 toast.success(successMessage);
 
-                // World data frissítés a kártyák miatt
                 const refreshResponse = await fetch(`/api/worlds/getFull?worldId=${worldId}`);
                 if (refreshResponse.ok) {
                     const refreshedData = await refreshResponse.json();
@@ -210,7 +209,7 @@ export default function WorldPage() {
                         <DungeonSelection dungeons={dungeons || []} playerCards={playerCards} onDungeonSelect={handleDungeonSelect} onBack={() => router.push(`/world/${worldId}`)} />
                     )}
 
-                    {/* Harc nézet */}
+
                     {currentView === "battle" && selectedDungeon && (
                         // Kulcs a remount miatt restartnál
                         <div className="relative">

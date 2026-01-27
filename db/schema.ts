@@ -174,28 +174,3 @@ export const playerDeckCards = mysqlTable("player_deck_cards", {
         uniqueDeckCard: index("unique_deck_card").on(table.deckId, table.playerCardId),
     };
 });
-
-// Nincs haszálva
-export const initialDungeonTypes = [
-    {
-        name: 'Egyszerű találkozás',
-        normalCardsCount: 1,
-        vezerCardsCount: 0,
-        rewardType: 'damage_plus_1',
-        rewardDescription: '+1 sebzés a kiválasztott kártyára'
-    },
-    {
-        name: 'Kis kazamata',
-        normalCardsCount: 3,
-        vezerCardsCount: 1,
-        rewardType: 'health_plus_2',
-        rewardDescription: '+2 életerő a kiválasztott kártyára'
-    },
-    {
-        name: 'Nagy kazamata',
-        normalCardsCount: 5,
-        vezerCardsCount: 1,
-        rewardType: 'damage_plus_3',
-        rewardDescription: '+3 sebzés a kiválasztott kártyára'
-    }
-];

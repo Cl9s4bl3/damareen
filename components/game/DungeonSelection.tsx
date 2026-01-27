@@ -44,7 +44,7 @@ export function DungeonSelection({ dungeons, playerCards, onDungeonSelect, onBac
 
         const selectedCardObjects = selectedCards.map(id =>
             availableCards.find(card => card.id === id)
-        ).filter(card => card !== undefined); // Undefined törlés
+        ).filter(card => card !== undefined);
 
 
         onDungeonSelect(selectedDungeon, selectedCardObjects);
